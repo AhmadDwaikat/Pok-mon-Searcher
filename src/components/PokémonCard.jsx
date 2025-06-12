@@ -1,9 +1,12 @@
+import "./PokémonCard.css"; // 👈 Add this line
+
+
 export default function PokémonCard({ pokemonData }) {
       const { name, sprites, types, stats } = pokemonData;
 
   return (
     <>
-       <div>
+       <div className="pokemon-card">
       <h2 >{name.charAt(0).toUpperCase() + name.slice(1)}</h2>
       <img src={sprites.front_default} alt={name} />
       <p><strong>Type:</strong> {types.map(t => t.type.name).join(", ")}</p>

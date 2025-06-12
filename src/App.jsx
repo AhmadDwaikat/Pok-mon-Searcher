@@ -2,57 +2,30 @@ import { useState } from "react";
 import "./App.css";
 import PokémonCard from "./components/PokémonCard";
 import { useQuery } from "@tanstack/react-query";
+import PokémonList from "./components/PokémonList";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [inputValue, setInputValue] = useState("");
+
   const { isPending, error, data } = useQuery({
     retry: false,
     queryKey: ["pokemon", inputValue],
-    queryFn: async () =>{
-   
+    queryFn: async () => {
       const response = await fetch(
         `https://pokeapi.co/api/v2/pokemon/${inputValue.toLowerCase()}`
-      )
-    
-        if (!response.ok) {
-          throw new Error("Pokémon not found");
-        }
-        return response.json();
-       },
+      );
+
+      if (!response.ok) {
+        throw new Error("Pokémon not found");
+      }
+      return response.json();
+    },
+    staleTime: 0,
     enabled: !!inputValue,
   });
 
-
-
-  
-  // const [pokemonData, setPokemonData] = useState(null);
-  // const [pError, setPError] = useState("");
-  // const [isLoading,setIsLoading] = useState(false);
-  // useEffect(() => {
-  //   const fetchPokemon = async () => {
-  //     if (inputValue.trim() === "") {
-  //       return;
-  //     }
-  //     setIsLoading(true);
-  //     try {
-  //       const response = await fetch(
-  //         `https://pokeapi.co/api/v2/pokemon/${inputValue}`
-  //       );
-  //       if (!response.ok) {
-  //         throw new Error("pokemon not Found");
-  //       }
-  //       const pokemon = await response.json();
-  //       setPokemonData(pokemon);
-  //     } catch (error) {
-  //       setPError(error.message);
-  //       setPokemonData(null);
-  //     }
-  //     setIsLoading(false);
-  //   };
-  //   fetchPokemon();
-  // }, [inputValue]);
-
+ 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -76,6 +49,8 @@ function App() {
       )}
 
       {inputValue && data && <PokémonCard pokemonData={data} />}
+
+      <PokémonList/>
     </>
   );
 }
